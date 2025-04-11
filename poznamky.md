@@ -28,3 +28,6 @@
 - zkouset ruzna okoli
 - Univerzalni i dedikovane filtry
 - klidne nespojite jadra (treba hlavni pixel, pak o pet vedle apod) - muze se hodit na ty periodicke
+
+## Dodatečné
+- na obrázky pouzit scikit-image, celkove super knihovna na [image filtering](https://scikit-image.org/skimage-tutorials/lectures/1_image_filters.html)
