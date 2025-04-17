@@ -14,13 +14,14 @@ testing_set_imgs = ["camera"]
 image_width = 128 # Width of the image (14 pixels)
 image_height = 128 # Height of the image (14 pixels)
 dataset_dir = "datasets"
+dataset_file = "dataset.pkl"
 result_dir = "results"
 test_image = "camera"
 
 ##############################################
 ## CGP PARAMETERS
 ##############################################
-print_progress = True # Print progress overall classifier
+print_evo_progress = True # Print progress overall classifier
 n_columns = 60 # Number of columns in the CGP
 n_rows = 1 # Number of rows in the CGP
 n_levels_back = n_columns # Number of levels back in the CGP
