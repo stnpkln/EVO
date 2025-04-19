@@ -58,12 +58,20 @@ def get_test_data_classifier(noise_type):
 
     return test_dataset
 
-def save_results(results, filename):
+def save_results(results, best_individual, results_filename, classifier_filename):
     # Save the results to a file
-    with open(f"{result_dir}/{filename}", "wb") as f:
+    with open(f"{result_dir}/{results_filename}", "wb") as f:
         pickle.dump(results, f)
-    print(f"Results saved to {result_dir}/{filename}")
+    print(f"Results saved to {result_dir}/{results_filename}")
 
-get_test_data_classifier("vertical_noise")
+    # Save the classifier to a file
+    with open(f"{result_dir}/{classifier_filename}", "wb") as f:
+        pickle.dump(best_individual, f)
+    print(f"Classifier saved to {result_dir}/{classifier_filename}")
+
+    # save summary
+    with open(f"{result_dir}/{classifier_stats}.csv", "a") as f:
+        f.write(f"{seed},{mutation_rate},{max_evaluations},{results['accuracy']},{results['precision']},{results['recall']}\n")
+
 
 

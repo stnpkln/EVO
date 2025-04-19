@@ -17,6 +17,8 @@ dataset_dir = "datasets"
 dataset_file = "dataset.pkl"
 result_dir = "results"
 test_image = "camera"
+classifier_stats = "classifier_stats"
+classifier_threshold = 127
 
 ##############################################
 ## CGP PARAMETERS
@@ -39,13 +41,13 @@ primitives = (
     ConditionalAssign,
     AbsoluteDiff
 ) # List of primitives to use in the CGP
-n_inputs = image_width * image_height # Number of inputs (flattened image)
+n_inputs = 9 # Number of inputs, !! DEPENDS ON CHOSEN WINDOW !!
 n_outputs = 1 # Number of outputs (1 for binary classification)
 n_parents = 1 # Number of parents to select for breeding
 n_offsprings = 4 # Number of offsprings to generate
 mutation_rate = 0.1 # Mutation rate
 termination_fitness = 0.0 # Termination fitness
-max_evaluations = 1e2 # Maximum number of generations
+max_evaluations = 5e2 # Maximum number of fitness evaluations
 max_generations = max_evaluations / (n_parents + n_offsprings) # Maximum number of generations
 n_processes = 1 # Number of processes for parallel evaluation
 
@@ -68,4 +70,5 @@ def get_config():
         "max_evaluations": max_evaluations,
         "max_generations": max_generations,
         "n_processes": n_processes,
+		"classifier_threshold": classifier_threshold,
     }

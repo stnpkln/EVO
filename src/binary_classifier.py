@@ -1,21 +1,41 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from file_handler import get_train_data_classifier, save_results
+from evaluation import evaluate_classifier
+from file_handler import get_test_data_classifier, get_train_data_classifier, save_results
 from params import *
 from windows import apply_window, window_3x3
 import cgp
+
+class Classifier:
+    def __init__(self, classifier_func, window, threshold):
+        self.classifier_func = classifier_func
+        self.window = window
+        self.threshold = threshold
+
+    def __call__(self, image):
+        y_pred = []
+        for x in range(len(image)):
+            for y in range(len(image[0])):
+                classifier_input = apply_window(image, self.window, x, y)
+                prediction = self.classifier_func(*classifier_input)
+                classification = 0
+                if prediction > self.threshold:
+                    classification = 255
+                y_pred.append(classification)
+        return np.array(y_pred).reshape(image.shape)
 
 # turn off numpy overflow warnings (overflows are expected)
 np.seterr(over='ignore', under='ignore')
 ############################################################
 ## EVOLVE
 ############################################################
-def get_binary_classifier(noise_type, window, seed):
+def evolve_binary_classifier(noise_type, window, seed):
     random.seed(seed)
     if (noise_type not in noise_types):
         raise ValueError(f"Noise type {noise_type} is not supported. Supported noise types are: {noise_types}")
     
     result_file_name = f"results_{noise_type}_{window['name']}_{seed}.pkl"
+    classifier_file_name = f"best_individual_{seed}.pkl"
 
     ##############################################
     ## LOAD DATASET
@@ -23,8 +43,11 @@ def get_binary_classifier(noise_type, window, seed):
     
     training_data = get_train_data_classifier(noise_type)
 
-    # convert to binary classification - if the label is the number to classify, set it to 255, otherwise set it to 0
-
+    ##############################################
+    ## SET GLOBAL VARIABLES THAT ARE DEPENDANT
+    ##############################################
+    n_inputs = len(window["coords"])
+    
     ##############################################
     ## DEFINE OBJECTIVE FUNCTION
     ##############################################
@@ -37,7 +60,6 @@ def get_binary_classifier(noise_type, window, seed):
         predicted_pixels = 0
         classify = individual.to_func()
         # TODO somehow do the filter shapes
-        print(len(training_data))
         for (noised_image, mask)  in training_data:
             for x in range(len(noised_image)):
                 for y in range(len(noised_image[0])):
@@ -67,7 +89,6 @@ def get_binary_classifier(noise_type, window, seed):
     ## DEFINE POPULATION
     ########################################################
 
-    n_inputs = image_width * image_height
     genome_params= {
             "n_inputs": n_inputs,
             "n_outputs": n_outputs,
@@ -102,13 +123,26 @@ def get_binary_classifier(noise_type, window, seed):
                     callback=recording_callback
     )
 
-    # save the results to a file
+
+    # evaluate result on testing dataset
+    best_individual = results["best_individual"]
+    classifier_func = best_individual.to_func()
+    classifier = Classifier(classifier_func, window, classifier_threshold)
+    accuracy, precision, recall, pred_mask, mask = evaluate_classifier(classifier, noise_type)
+
+    # save the results and config
     results["seed"] = seed
     results["noise"] = noise_type
     results["window"] = window["name"]
+    results["accuracy"] = accuracy
+    results["precision"] = precision
+    results["recall"] = recall
+    results["pred_mask"] = pred_mask
+    results["mask"] = mask
     results["config"] = get_config()
+    del results["best_individual"] # remove the individual from the results, it is saved separately, cgp library causes problems
 
-    save_results(results, result_file_name)
+    save_results(results, best_individual, result_file_name, classifier_file_name)
     return results
 
-get_binary_classifier(noise_types[0], window=window_3x3, seed=seed)
+evolve_binary_classifier(noise_types[0], window=window_3x3, seed=seed)
