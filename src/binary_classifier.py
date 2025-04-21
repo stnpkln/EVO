@@ -1,3 +1,5 @@
+import os
+import pickle
 import matplotlib.pyplot as plt
 import numpy as np
 from evaluation import evaluate_classifier
@@ -35,7 +37,7 @@ def evolve_binary_classifier(noise_type, window, seed):
         raise ValueError(f"Noise type {noise_type} is not supported. Supported noise types are: {noise_types}")
     
     result_file_name = f"results_{noise_type}_{window['name']}_{seed}.pkl"
-    classifier_file_name = f"best_individual_{seed}.pkl"
+    classifier_file_name = f"best_classifier_{seed}.pkl"
 
     ##############################################
     ## LOAD DATASET
@@ -142,7 +144,17 @@ def evolve_binary_classifier(noise_type, window, seed):
     results["config"] = get_config()
     del results["best_individual"] # remove the individual from the results, it is saved separately, cgp library causes problems
 
-    save_results(results, best_individual, result_file_name, classifier_file_name)
+    save_results(results, best_individual, window, result_file_name, classifier_file_name)
     return results
+
+def get_evolved_classifier(classifier_seed, window):
+    if os.path.exists(f"{result_dir}/best_classifier_{seed}.pkl"):
+        with open(f"{result_dir}/best_classifier_{seed}.pkl", "rb") as f:
+            best_classifier = pickle.load(f)
+            classifier_func = best_classifier["best_individual"].to_func()
+            classifier = Classifier(classifier_func, best_classifier["window"], best_classifier["threshold"])
+    else:
+        raise ValueError(f"Classifier {classifier_seed} not found.")
+    return classifier
 
 evolve_binary_classifier(noise_types[0], window=window_3x3, seed=seed)
