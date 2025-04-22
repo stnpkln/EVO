@@ -3,7 +3,7 @@ import pickle
 import matplotlib.pyplot as plt
 import numpy as np
 from evaluation import evaluate_classifier
-from file_handler import get_test_data_classifier, get_train_data_classifier, save_results
+from file_handler import get_train_data_classifier, save_classifier, save_classifier_results
 from params import *
 from windows import apply_window, window_3x3
 import cgp
@@ -36,7 +36,7 @@ def evolve_binary_classifier(noise_type, window, seed):
     if (noise_type not in noise_types):
         raise ValueError(f"Noise type {noise_type} is not supported. Supported noise types are: {noise_types}")
     
-    result_file_name = f"results_{noise_type}_{window['name']}_{seed}.pkl"
+    result_file_name = f"results_classifier_{noise_type}_{window['name']}_{seed}.pkl"
     classifier_file_name = f"best_classifier_{seed}.pkl"
 
     ##############################################
@@ -144,17 +144,19 @@ def evolve_binary_classifier(noise_type, window, seed):
     results["config"] = get_config()
     del results["best_individual"] # remove the individual from the results, it is saved separately, cgp library causes problems
 
-    save_results(results, best_individual, window, result_file_name, classifier_file_name)
+    save_classifier_results(results, result_file_name)
+    save_classifier(best_individual, window, classifier_file_name)
     return results
 
-def get_evolved_classifier(classifier_seed, window):
-    if os.path.exists(f"{result_dir}/best_classifier_{seed}.pkl"):
-        with open(f"{result_dir}/best_classifier_{seed}.pkl", "rb") as f:
+def get_evolved_classifier(classifier_seed):
+    classifier_path = f"{result_dir}/best_classifier_{classifier_seed}.pkl"
+    if os.path.exists(classifier_path):
+        with open(classifier_path, "rb") as f:
             best_classifier = pickle.load(f)
             classifier_func = best_classifier["best_individual"].to_func()
             classifier = Classifier(classifier_func, best_classifier["window"], best_classifier["threshold"])
     else:
-        raise ValueError(f"Classifier {classifier_seed} not found.")
+        raise ValueError(f"Classifier {classifier_path} not found.")
     return classifier
 
-evolve_binary_classifier(noise_types[0], window=window_3x3, seed=seed)
+# evolve_binary_classifier(noise_types[0], window=window_3x3, seed=seed)

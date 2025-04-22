@@ -1,10 +1,29 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from binary_classifier import get_evolved_classifier
-from file_handler import get_train_data_filter, save_results
+from evaluation import evaluate_filter
+from file_handler import get_train_data_filter, save_filter, save_filter_results
 from params import *
 from windows import apply_window, window_3x3
 import cgp
+
+class Filter:
+    def __init__(self, filter_func, classifier, window):
+        self.classifier = classifier
+        self.window = window
+        self.filter_func = filter_func
+
+    def __call__(self, image):
+        classified_image = self.classifier(image)
+        for x in range(len(image)):
+            for y in range(len(image[0])):
+                if classified_image[x][y] != 255:
+                    continue
+                filter_input = apply_window(image, self.window, x, y)
+                prediction = self.filter_func(*filter_input)
+                image[x][y] = prediction
+
+        return image
 
 # turn off numpy overflow warnings (overflows are expected)
 np.seterr(over='ignore', under='ignore')
@@ -17,7 +36,7 @@ def evolve_image_filter(classifier_seed, noise_type, window, seed):
         raise ValueError(f"Noise type {noise_type} is not supported. Supported noise types are: {noise_types}")
     
     result_file_name = f"results_filter_{noise_type}_{window['name']}_{seed}.pkl"
-    classifier_file_name = f"best_filter_individual_{seed}.pkl"
+    filter_file_name = f"best_filter_{seed}.pkl"
 
     ##############################################
     ## LOAD DATASET AND CLASSIFIER
@@ -26,12 +45,13 @@ def evolve_image_filter(classifier_seed, noise_type, window, seed):
     training_data = get_train_data_filter(noise_type)
     classifier = get_evolved_classifier(classifier_seed)
     
-	##############################################
+    ##############################################
     ## CLASSIFY PIXEL DAMAGE 
     ##############################################
     classified_images = []
     for (noised_image, _) in training_data:
         classified_images.append(classifier(noised_image))
+        
 
     damaged_pixel_coords_per_image = []
     for classified_image in classified_images:
@@ -41,7 +61,6 @@ def evolve_image_filter(classifier_seed, noise_type, window, seed):
                 if (classified_image[x][y] == 255):
                     damaged_pixel_coords.append((x, y))
         damaged_pixel_coords_per_image.append(damaged_pixel_coords)
-    print(f"shape of damaged_pixel_coords_per_image: {damaged_pixel_coords_per_image.shape}")
 
     ##############################################
     ## SET GLOBAL VARIABLES THAT ARE DEPENDANT
@@ -122,29 +141,29 @@ def evolve_image_filter(classifier_seed, noise_type, window, seed):
                     callback=recording_callback
     )
 
-    #TODO
+    # TODO
     # evaluate result on testing dataset
-    # best_individual = results["best_individual"]
-    # filter_func = best_individual.to_func()
-    # filter = Filter(filter_func, classifier, window, classifier_threshold)
-    # accuracy, precision, recall, image, predicted_image = evaluate_filter(filter, noise_type)
+    best_individual = results["best_individual"]
+    filter_func = best_individual.to_func()
+    filter = Filter(filter_func, classifier, window)
+    filtered_image, original_image, noised_image = evaluate_filter(filter, noise_type)
 
     # save the results and config
-    # results["seed"] = seed
-    # results["noise"] = noise_type
-    # results["window"] = window["name"]
-    # results["accuracy"] = accuracy
-    # results["precision"] = precision
-    # results["recall"] = recall
-    # results["pred_mask"] = pred_mask
-    # results["mask"] = mask
-    # results["config"] = get_config()
-    # del results["best_individual"] # remove the individual from the results, it is saved separately, cgp library causes problems
+    results["seed"] = seed
+    results["noise"] = noise_type
+    results["window"] = window["name"]
+    results["filtered_image"] = filtered_image
+    results["original_image"] = original_image
+    results["noised_image"] = noised_image
+    results["classifier_seed"] = classifier_seed
+    results["config"] = get_config()
+    del results["best_individual"] # remove the individual from the results, it is saved separately, cgp library causes problems
 
-    # save_results(results, best_individual, result_file_name, classifier_file_name)
+    save_filter_results(results, result_file_name)
+    save_filter(best_individual, window, classifier_seed, filter_file_name)
     return results
 
-evolve_image_filter(classifier_seed="1307335045",
+evolve_image_filter(classifier_seed="1563348194",
                     noise_type=noise_types[0],
                     window=window_3x3,
                     seed=seed)

@@ -28,8 +28,7 @@ def get_train_data_filter(noise_type):
     dataset = get_dataset()
     train_dataset = []
     for img in testing_set_imgs:
-        training_data = []
-        training_data.append((dataset[img][noise_type], dataset[img]["original"]))
+        train_dataset.append((dataset[img][noise_type], dataset[img]["original"]))
 
     return train_dataset
 
@@ -37,8 +36,7 @@ def get_test_data_filter(noise_type):
     dataset = get_dataset()
     test_dataset = []
     for img in testing_set_imgs:
-        test_data = []
-        test_data.append((dataset[img][noise_type], dataset[img]["original"]))
+        test_dataset.append((dataset[img][noise_type], dataset[img]["original"]))
 
     return test_dataset
 
@@ -58,12 +56,29 @@ def get_test_data_classifier(noise_type):
 
     return test_dataset
 
-def save_results(results, best_individual, window, results_filename, classifier_filename):
+def save_classifier_results(results, results_filename):
     # Save the results to a file
     with open(f"{result_dir}/{results_filename}", "wb") as f:
         pickle.dump(results, f)
     print(f"Results saved to {result_dir}/{results_filename}")
 
+    # save summary
+    with open(f"{result_dir}/{classifier_stats}.csv", "a") as f:
+        f.write(f"{seed},{results['window']},{mutation_rate},{max_evaluations},{results['accuracy']},{results['precision']},{results['recall']}\n")
+    print(f"Summary saved to {result_dir}/{classifier_stats}.csv")
+
+def save_filter_results(results, results_filename):
+    # Save the results to a file
+    with open(f"{result_dir}/{results_filename}", "wb") as f:
+        pickle.dump(results, f)
+    print(f"Results saved to {result_dir}/{results_filename}")
+
+    # save summary
+    with open(f"{result_dir}/{filter_stats}.csv", "a") as f:
+        f.write(f"{seed},{results['window']},{results['classifier_seed']},{mutation_rate},{max_evaluations},{results['best_fitness_hist'].pop(-1)}\n")
+    print(f"Summary saved to {result_dir}/{filter_stats}.csv")
+
+def save_classifier(best_individual, window, classifier_filename):
     # Save the classifier to a file
     with open(f"{result_dir}/{classifier_filename}", "wb") as f:
         classifier = {}
@@ -73,8 +88,12 @@ def save_results(results, best_individual, window, results_filename, classifier_
         pickle.dump(classifier, f)
     print(f"Classifier saved to {result_dir}/{classifier_filename}")
 
-    # save summary
-    with open(f"{result_dir}/{classifier_stats}.csv", "a") as f:
-        f.write(f"{seed},{mutation_rate},{max_evaluations},{results['accuracy']},{results['precision']},{results['recall']}\n")
-
-
+def save_filter(best_individual, window, classifier_seed, filter_filename):
+    # Save the filter to a file
+    with open(f"{result_dir}/{filter_filename}", "wb") as f:
+        filter = {}
+        filter["best_individual"] = best_individual
+        filter["window"] = window
+        filter["classifier_seed"] = classifier_seed
+        pickle.dump(filter, f)
+    print(f"Filter saved to {result_dir}/{filter_filename}")
