@@ -1,4 +1,9 @@
-# EVO
-Projekt pro předmět evoluční algoritmy
+# Evolving image filter using CGP
+Project for EVO, evolves a binary classifier (classifies pixel damage) and an image filter using this classifier. 
+Experiments mainly concern different window types (or "kernels").
 
-- skripty pocitaji se spoustenim z rootoveho adresare projektu
+- scripts are supposed to be run from the root directory of the repo.
+
+## Setup
+- Create venv in `\` using `requirements.txt` for processing in python notebooks
+- Create venv in `\src` using `src\requirements.txt` for running cgp (cartesian genetic programming)
