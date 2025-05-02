@@ -10,7 +10,7 @@ def evolve_bin_classifiers(batch_size=8, batch_count=4, noises=noise_types):
             runs = []
             for i in range(batch_size):
                 seed = get_new_seed()
-                p = Process(target=evolve_binary_classifier, args=("vertical_noise", window_3x3, seed,))
+                p = Process(target=evolve_binary_classifier, args=(noise_type, window_3x3, seed,))
                 p.start()
                 runs.append(p)
             for p in runs:
