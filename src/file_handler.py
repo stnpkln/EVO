@@ -64,7 +64,7 @@ def save_classifier_results(results, results_filename):
 
     # save summary
     with open(f"{result_dir}/{classifier_stats}.csv", "a") as f:
-        f.write(f"{seed},{results['window']},{mutation_rate},{max_evaluations},{results['accuracy']},{results['precision']},{results['recall']}\n")
+        f.write(f"{results['seed']},{results['noise']},{results['window']},{mutation_rate},{max_evaluations},{results['accuracy']},{results['precision']},{results['recall']}\n")
     print(f"Summary saved to {result_dir}/{classifier_stats}.csv")
 
 def save_filter_results(results, results_filename):
@@ -75,7 +75,7 @@ def save_filter_results(results, results_filename):
 
     # save summary
     with open(f"{result_dir}/{filter_stats}.csv", "a") as f:
-        f.write(f"{seed},{results['window']},{results['classifier_seed']},{mutation_rate},{max_evaluations},{results['best_fitness_hist'].pop(-1)}\n")
+        f.write(f"{results['seed']},{results['noise']},{results['window']},{results['classifier_seed']},{mutation_rate},{max_evaluations},{results['best_fitness_hist'].pop(-1)}\n")
     print(f"Summary saved to {result_dir}/{filter_stats}.csv")
 
 def save_classifier(best_individual, window, classifier_filename):

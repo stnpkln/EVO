@@ -13,3 +13,7 @@ Experiments mainly concern different window types (or "kernels").
 - create the datasets using `preprocessing.ipynb`
 - run experiments in `\src`
 - Visualize results in `result_processing.ipynb`
+
+# Time
+- classifier: 2000 eval. / 3 min = 666/minute
+- classifier: 4 * 8 * 1000 eval. / 10 min = 3200/minute -> 

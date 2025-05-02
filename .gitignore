@@ -175,4 +175,4 @@ cython_debug/
 
 processing-env/
 src/evo-hal-env/
-lib_src/
+lib_src

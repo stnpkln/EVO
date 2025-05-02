@@ -158,5 +158,3 @@ def get_evolved_classifier(classifier_seed):
     else:
         raise ValueError(f"Classifier {classifier_path} not found.")
     return classifier
-
-# evolve_binary_classifier(noise_types[0], window=window_3x3, seed=seed)

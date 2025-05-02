@@ -1,8 +1,13 @@
 import random
 from datetime import datetime, timezone
 from operations import *
+from time import sleep
 
-seed = int(datetime.now(timezone.utc).timestamp() * 1000) % (2 ** 32) # Seed for reproducibility
+def get_new_seed():
+    global seed
+    sleep(0.01)
+    seed = int(datetime.now(timezone.utc).timestamp() * 1000) % (2 ** 32)
+    return seed
 ##############################################
 ## DATASET PARAMETERS
 ##############################################
@@ -48,13 +53,12 @@ n_parents = 1 # Number of parents to select for breeding
 n_offsprings = 4 # Number of offsprings to generate
 mutation_rate = 0.1 # Mutation rate
 termination_fitness = 0.0 # Termination fitness
-max_evaluations = 1e3 # Maximum number of fitness evaluations
+max_evaluations = 2e4 # Maximum number of fitness evaluations
 max_generations = max_evaluations / (n_parents + n_offsprings) # Maximum number of generations
 n_processes = 1 # Number of processes for parallel evaluation
 
 def get_config():
 	return {
-		"seed": seed,
         "image_width": image_width,
         "image_height": image_height,
         "dataset_dir": dataset_dir,
