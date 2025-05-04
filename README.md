@@ -17,3 +17,7 @@ Experiments mainly concern different window types (or "kernels").
 # Time
 - classifier: 2000 eval. / 3 min = 666/minute
 - classifier: 4 * 8 * 1000 eval. / 10 min = 3200/minute -> 
+
+# TODO 
+- also evolve salt and pepper
+- compare with median filter
