@@ -16,4 +16,4 @@ def evolve_bin_classifiers(batch_size=8, batch_count=4, noises=noise_types):
             for p in runs:
                 p.join()
 
-evolve_bin_classifiers(batch_size=8, batch_count=1 , noises=["periodic_noise"])
+evolve_bin_classifiers(batch_size=8, batch_count=3 , noises=[noise_types[1], noise_types[2]])
