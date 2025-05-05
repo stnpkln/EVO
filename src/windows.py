@@ -13,6 +13,36 @@ window_3x3 = {
 	]
 }
 
+window_for_vertical = {
+	"name": "window_for_vertical",
+	"coords": [
+		(-1, -1), # levy horni roh
+		(-1, 1), # pravy horni roh
+		(0, -2), # krajne levy stred
+		(0, -1), # levy stred
+		(0, 0), # stred
+		(0, 1), # pravy stred
+		(0, 2), # krajne pravy stred
+		(1, -1), # levy dolni roh
+		(1, 1) # pravy dolni roh
+	]
+}
+
+window_for_diagonal = {
+	"name": "window_for_diagonal",
+	"coords": [
+		(-1, 0), # horni stred
+		(-1, 1), # pravy horni roh
+		(-2, 2), # krajne pravy roh
+		(0, -1), # levy stred
+		(0, 0), # stred
+		(0, 1), # pravy stred
+		(1, 1), # levy dolni roh
+		(1, 0), # dolni stred
+		(2, -2) # krajne levy roh
+	]
+}
+
 def apply_window(image, window, x, y):
 	"""
 	Applies a window to a pixel in an image.

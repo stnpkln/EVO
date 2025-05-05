@@ -2,6 +2,7 @@ import random
 from datetime import datetime, timezone
 from operations import *
 from time import sleep
+from windows import window_3x3, window_for_vertical, window_for_diagonal
 
 def get_new_seed():
     global seed
@@ -14,6 +15,17 @@ def get_new_seed():
 # WARNING: If you change the sample size, image width or image height, you need to delete the dataset files first!
 print_dataset_info = False # Print information about the dataset
 noise_types = ["vertical_noise", "diagonal_noise", "periodic_noise"]
+window_types = ["window_3x3", "window_for_vertical", "window_for_diagonal"]
+windows_per_noise = {
+    "vertical_noise": [window_3x3, window_for_vertical],
+    "diagonal_noise": [window_3x3, window_for_diagonal],
+    "periodic_noise": [window_3x3, window_for_vertical]
+}
+classifiers_seeds_per_noise = {
+    "vertical_noise": "2291659237",
+    "diagonal_noise": "2441695047",
+    "periodic_noise": "2440749822"
+}
 training_set_imgs = ["moon", "astronaut"]
 testing_set_imgs = ["camera"]
 image_width = 128 # Width of the image (14 pixels)
@@ -53,7 +65,7 @@ n_parents = 1 # Number of parents to select for breeding
 n_offsprings = 4 # Number of offsprings to generate
 mutation_rate = 0.1 # Mutation rate
 termination_fitness = 0.0 # Termination fitness
-max_evaluations = 2e4 # Maximum number of fitness evaluations
+max_evaluations = 1e2 # Maximum number of fitness evaluations
 max_generations = max_evaluations / (n_parents + n_offsprings) # Maximum number of generations
 n_processes = 1 # Number of processes for parallel evaluation
 

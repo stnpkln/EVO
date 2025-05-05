@@ -162,8 +162,3 @@ def evolve_image_filter(classifier_seed, noise_type, window, seed):
     save_filter_results(results, result_file_name)
     save_filter(best_individual, window, classifier_seed, filter_file_name)
     return results
-
-evolve_image_filter(classifier_seed="1563348194",
-                    noise_type=noise_types[0],
-                    window=window_3x3,
-                    seed=seed)
