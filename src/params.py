@@ -65,7 +65,7 @@ n_parents = 1 # Number of parents to select for breeding
 n_offsprings = 4 # Number of offsprings to generate
 mutation_rate = 0.1 # Mutation rate
 termination_fitness = 0.0 # Termination fitness
-max_evaluations = 1e2 # Maximum number of fitness evaluations
+max_evaluations = 1e5 # Maximum number of fitness evaluations
 max_generations = max_evaluations / (n_parents + n_offsprings) # Maximum number of generations
 n_processes = 1 # Number of processes for parallel evaluation
 

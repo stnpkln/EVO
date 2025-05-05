@@ -15,8 +15,8 @@ Experiments mainly concern different window types (or "kernels").
 - Visualize results in `result_processing.ipynb`
 
 # Time
-- classifier: 2000 eval. / 3 min = 666/minute
-- classifier: 4 * 8 * 1000 eval. / 10 min = 3200/minute -> 
+- classifier: 2000 eval. / 3 min = 666/minute (8 processes)
+- image filter: 5000 eval. / 2 min = 2500/minute (1 process)
 
 # TODO 
 - also evolve salt and pepper
