@@ -16,4 +16,4 @@ def evolve_image_filters(batch_size=8, batch_count=4, noises=noise_types):
                 for p in runs:
                     p.join()
 
-evolve_image_filters(batch_size=8, batch_count=4, noises=noise_types)
+evolve_image_filters(batch_size=8, batch_count=4, noises=["diagonal_noise", "periodic_noise"])
