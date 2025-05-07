@@ -14,17 +14,19 @@ def get_new_seed():
 ##############################################
 # WARNING: If you change the sample size, image width or image height, you need to delete the dataset files first!
 print_dataset_info = False # Print information about the dataset
-noise_types = ["vertical_noise", "diagonal_noise", "periodic_noise"]
+noise_types = ["vertical_noise", "diagonal_noise", "periodic_noise", "sap_noise"]
 window_types = ["window_3x3", "window_for_vertical", "window_for_diagonal"]
 windows_per_noise = {
     "vertical_noise": [window_3x3, window_for_vertical],
     "diagonal_noise": [window_3x3, window_for_diagonal],
-    "periodic_noise": [window_3x3, window_for_vertical]
+    "periodic_noise": [window_3x3, window_for_vertical],
+    "sap_noise": [window_3x3]
 }
 classifiers_seeds_per_noise = {
     "vertical_noise": "2291659237",
     "diagonal_noise": "2441695047",
-    "periodic_noise": "2440749822"
+    "periodic_noise": "2440749822",
+    "sap_noise": "2802942914"
 }
 training_set_imgs = ["moon", "astronaut"]
 testing_set_imgs = ["camera"]
@@ -87,5 +89,5 @@ def get_config():
         "max_evaluations": max_evaluations,
         "max_generations": max_generations,
         "n_processes": n_processes,
-		"classifier_threshold": classifier_threshold,
+        "classifier_threshold": classifier_threshold,
     }
