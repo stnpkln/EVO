@@ -17,7 +17,7 @@ print_dataset_info = False # Print information about the dataset
 noise_types = ["vertical_noise", "diagonal_noise", "periodic_noise"]
 window_types = ["window_3x3", "window_for_vertical", "window_for_diagonal"]
 windows_per_noise = {
-    "vertical_noise": [window_3x3, window_for_vertical],
+    "vertical_noise": [window_for_vertical],
     "diagonal_noise": [window_3x3, window_for_diagonal],
     "periodic_noise": [window_3x3, window_for_vertical]
 }
