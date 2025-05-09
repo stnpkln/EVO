@@ -10,8 +10,10 @@ Setup
 - required python version is python 3.8.20 (because of the hal-cgp library)
 
 Running
-- create the datasets using `preprocessing.ipynb`
-- run experiments in `\src` (classifier_experiments.py and image_filter_experiments.py)
 - most of global configuration can be set in params.py
-- Visualize results in `result_processing.ipynb`
+- run experiments in `\src` The recommended order is:
+	- create datasets with `preprocessing.ipynb`
+	- create pixel damage classifiers with `classifier_experiments.py`
+	- create image filters with `image_filter_experiments.py`
+	- Visualize results with `result_processing.py`
 
