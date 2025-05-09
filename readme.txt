@@ -11,6 +11,7 @@ Setup
 
 Running
 - create the datasets using `preprocessing.ipynb`
-- run experiments in `\src`
+- run experiments in `\src` (classifier_experiments.py and image_filter_experiments.py)
+- most of global configuration can be set in params.py
 - Visualize results in `result_processing.ipynb`
 
